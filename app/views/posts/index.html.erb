@@ -1,20 +1,14 @@
-<p style="color: green"><%= notice %></p>
-
-<% content_for :title, "Posts" %>
-
-<h1>Posts</h1>
-<span id="posts_count">
-  <%= Post.count %>
-</span>
 <%= turbo_stream_from :posts_list %>
-<div id="all-posts">
+<div id="posts">
   <% @posts.each do |post| %>
     <%= render post %>
     <p>
       <%= link_to "Show this post", post %>
-      <%= render 'comments/comments', post: post %>      
+      
+      <!-- Add a unique comments target -->
+      <div id="<%= dom_id(post, :comments) %>">
+        <%= render 'comments/comments', post: post %>
+      </div>
     </p>
   <% end %>
 </div>
-
-<%= link_to "New post", new_post_path %>
