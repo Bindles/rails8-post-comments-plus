@@ -1,0 +1,7 @@
+<div id="<%= dom_id(post) %>">
+  <%= render post %>
+  <p>
+    <%= link_to "Show this post", post %>
+    <%= render 'comments/comments', post: post %>
+  </p>
+</div>

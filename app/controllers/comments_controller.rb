@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
     # rails 7 way =>
     @post.comments.create! params.require(:comment).permit(:content)
 
-    redirect_to @post, notice: "Comment created"
+    redirect_to posts_path, notice: "Comment created"
   end
 
   private

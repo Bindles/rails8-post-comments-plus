@@ -1,14 +1,18 @@
+<%# app/views/posts/index.html.erb %>
+
 <%= turbo_stream_from :posts_list %>
+<span id="posts_count">
+  <%= Post.count %>
+</span>
 <div id="posts">
   <% @posts.each do |post| %>
     <%= render post %>
     <p>
       <%= link_to "Show this post", post %>
       
-      <!-- Add a unique comments target -->
-      <div id="<%= dom_id(post, :comments) %>">
+
         <%= render 'comments/comments', post: post %>
-      </div>
+
     </p>
   <% end %>
 </div>
