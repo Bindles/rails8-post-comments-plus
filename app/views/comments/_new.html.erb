@@ -1,6 +1,12 @@
-<%= form_with(model: [ post, Comment.new]) do |form| %>
-  Your comment:
-  <%= form.label :content %>
-  <%= form.text_area :content, size: '20x5' %><br>
-  <%= form.submit %>
-<% end %>
+<%# comments/_new.html.erb %>
+
+<div class="new-comment-form p-3 bg-dark text-white rounded shadow">
+  <h3 class="h5 text-info mb-3">Add a Comment</h3>
+  <%= form_with(model: [post, Comment.new], class: "form-inline") do |form| %>
+    <div class="mb-3">
+      <%= form.label :content, "Your Comment:", class: "form-label text-info" %>
+      <%= form.text_area :content, size: '20x5', class: "form-control bg-black text-white border-info" %>
+    </div>
+    <%= form.submit "Post Comment", class: "btn btn-info text-dark fw-bold" %>
+  <% end %>
+</div>

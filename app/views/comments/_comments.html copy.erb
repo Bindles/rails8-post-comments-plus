@@ -1,0 +1,11 @@
+<h2>Comments</h2>
+
+<div id="comments_section">
+  <div id="<%= dom_id(post, :comments) %>">
+    <%= render post.comments.order(created_at: :desc) %>
+  </div>
+</div>
+
+<div id="new_comment_form">
+  <%= render 'comments/new', post: post %>
+</div>

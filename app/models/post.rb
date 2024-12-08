@@ -10,10 +10,10 @@ class Post < ApplicationRecord
   # after_destroy_commit { broadcast_remove_to :posts_list }
 
   # WITHOUGHT MAGIC DOES BELOW [but to 'all-posts' instead of posts]
-  # after_create_commit do
-  #   broadcast_update_to :posts_list, target: "posts_count", html: Post.count
-  #   broadcast_append_to :posts_list, target: "posts", partial: "posts/post", locals: { post: self }
-  # end
+  after_create_commit do
+    broadcast_update_to :posts_list, target: "posts_count", html: Post.count
+    #   broadcast_append_to :posts_list, target: "posts", partial: "posts/post", locals: { post: self }
+  end
   # after_update_commit do
   #   broadcast_replace_to :posts_list, target: self, partial: "posts/post", locals: { post: self }
   # end
