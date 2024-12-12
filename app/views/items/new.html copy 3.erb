@@ -1,0 +1,59 @@
+<% content_for :title, "New item" %>
+<%= turbo_frame_tag :index_new_post do %>
+  <h1>New item</h1>
+
+  <%= render "form", item: @item %>
+
+  <br>
+
+  <div>
+    <%= link_to "Back to items", items_path %>
+  </div>
+
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal">
+    <h1>New post</h1>
+    <%= render "form", post: @post %>
+    <br>
+    <div>
+      <%= link_to "Cancel", "#", data: {
+        controller: "modals",
+        action: "modals#close"
+      }, class: "cancel-button" %>
+    </div>
+  </div>
+<% end %>
+
+
+
+
+
+
+<% content_for :title, "New item" %>
+<%= turbo_frame_tag "modal" do %>
+
+    <h1>New item</h1>
+    <%= render "form", item: @item %>
+    <br>
+    <div>
+      <%= link_to "Cancel", "#", data: {
+        controller: "modals",
+        action: "modals#close"
+      }, class: "cancel-button" %>
+    </div>
+
+<% end %>

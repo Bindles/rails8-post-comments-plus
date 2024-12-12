@@ -1,0 +1,6 @@
+<div id="<%= dom_id(comment) %>" class="comment border border-info rounded p-3 bg-dark">
+  <p class="mb-1 text-white"><%= comment.content %></p>
+  <small class="text-info">
+    Posted on <time datetime="<%= comment.created_at.iso8601 %>"><%= comment.created_at.to_formatted_s(:long) %></time>
+  </small>
+</div>

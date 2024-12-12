@@ -1,0 +1,90 @@
+STYLED DONT LIKE STYLE
+<div id="comments_section" class="comments bg-black text-white p-3 rounded">
+  <h3 class="h5 text-info mb-3">Comments</h3>
+
+  <div id="<%= dom_id(post, :comments) %>" class="d-flex flex-column gap-3">
+    <%= render post.comments.order(created_at: :desc) %>
+  </div>
+
+  <div id="new_comment_form" class="mt-4">
+    <%= render 'comments/new', post: post %>
+  </div>
+</div>
+
+
+
+FIXED COMMENTS IN WRONG SPOT WITH DIV ID
+<h2>Comments</h2>
+
+<div id="comments">
+  <%= render post.comments %>
+</div>
+
+  <%= render 'comments/new', post: post %>
+
+
+
+COMMENTS SECTION THINK NEED AN ID CALLED COMMENTS
+<h2>Comments</h2>
+
+<div id="comments_section">
+  <div id="<%= dom_id(post, :comments) %>">
+    <%= render post.comments.order(created_at: :desc) %>
+  </div>
+</div>
+
+<div id="new_comment_form">
+  <%= render 'comments/new', post: post %>
+</div>
+
+
+
+<h2>Comments</h2>
+
+<div id="comments_section">
+  <div id="<%= dom_id(post, :comments) %>">
+    <%= render post.comments.order(created_at: :desc) %>
+  </div>
+</div>
+
+<div id="new_comment_form">
+  <%= render 'comments/new', post: post %>
+</div>
+
+
+COMMENTS w.o NEW
+<h2>Commentsx</h2>
+
+<div id="comments">
+  <%= render post.comments %>
+</div>
+
+COMMENTS W NEW
+<h2>Comments</h2>
+
+<div id="comments">
+  <%= render post.comments %>
+</div>
+
+  <%= render 'comments/new', post: post %>
+
+
+
+ONE WITH A NICE STIYLE
+<div class="comments-section mt-4">
+  <h2 class="h5 text-muted">Comments</h2>
+
+  <div id="comments_section">
+    <div id="<%= dom_id(post, :comments) %>" class="list-group">
+      <%= render post.comments.order(created_at: :desc) %>
+    </div>
+  </div>
+
+  <div id="new_comment_form" class="mt-3">
+    <div class="card">
+      <div class="card-body">
+        <%= render 'comments/new', post: post %>
+      </div>
+    </div>
+  </div>
+</div>
