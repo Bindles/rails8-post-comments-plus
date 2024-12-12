@@ -1,0 +1,25 @@
+<%# app/views/posts/index.html.erb %>
+
+<%= turbo_stream_from :posts_list %>
+<span id="posts_count">
+  <%= Post.count %>
+</span>
+<div id="posts">
+  <% @posts.each do |post| %>
+    <%= render post %>
+    <p>
+      <%= link_to "Show this post", post %>
+      
+
+        <%#= render 'comments/comments', post: post %>
+
+    </p>
+  <% end %>
+</div>
+
+
+<%#THIS IS THE SIMPLE TURBO FRAME PLYS THE FRAME ON NEW%>
+<%= link_to "New item", new_post_path, data: { turbo_frame: :index_new_post_modal  } %>
+
+<%= turbo_frame_tag :index_new_post_modal %> <%# , src: new_item_path %>
+

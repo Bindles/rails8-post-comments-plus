@@ -18,9 +18,6 @@
   New Post
 </button>
 
-<%#test post button%>
-<%= button_tag "Show in Modal", class: "btn btn-secondary show-post-modal", data: { post_id: 122} %>
-
 <%# Modal Frame %>
 <%= turbo_frame_tag :index_new_post_modal do %>
   <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
@@ -39,56 +36,45 @@
 <% end %>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   const modal = document.getElementById('newPostModal');
   const modalBody = document.getElementById('modalBody');
   const newPostButton = document.getElementById('newPostButton');
+
+  // Initialize the modal using Bootstrap's modal API
   const bootstrapModal = new bootstrap.Modal(modal);
 
-  // Open modal and load the "New Post" form
-  newPostButton.addEventListener('click', function () {
-    fetch('/posts/new')
-      .then(response => response.text())
-      .then(html => {
-        modalBody.innerHTML = html; // Insert the form HTML into the modal body
-        bootstrapModal.show(); // Show the modal
-      })
-      .catch(error => console.error('Error loading the form:', error));
-  });
 
-  // Event delegation for the "Show in Modal" button
-  document.body.addEventListener('click', function (event) {
-    if (event.target.matches('.show-post-modal')) {
-      const postId = event.target.dataset.postId;
 
-      // Fetch the post content and load it into the modal body
-      fetch(`/posts/${postId}`)
-        .then(response => response.text())
-        .then(html => {
-          modalBody.innerHTML = html; // Insert the post HTML into the modal body
-          bootstrapModal.show(); // Show the modal
-        })
-        .catch(error => console.error('Error loading the post:', error));
-    }
-  });
-
-  // Clear modal content when closed
+  // Close modal when clicking the backdrop or pressing escape
   modal.addEventListener('hidden.bs.modal', function () {
     modalBody.innerHTML = ''; // Clear modal content after it's closed
   });
 
-  // Close modal on successful form submission
-  document.addEventListener('turbo:submit-end', function (event) {
+  // Listen for form submission completion and close modal
+  document.addEventListener('turbo:submit-end', function(event) {
+    // Check if the submission was successful and close the modal
     if (event.detail.success) {
       bootstrapModal.hide(); // Hide the modal after success
     }
   });
 });
-
 </script>
 
 
 
+NEW:
+<% content_for :title, "New post" %>
+<%= turbo_frame_tag :index_new_post_modal do %>
+  <h1>New post</h1>
 
+  <%= render "form", post: @post %>
+
+  <br>
+
+  <div>
+    <%= link_to "Back to posts", posts_path %>
+  </div>
+  <% end %>
 
 

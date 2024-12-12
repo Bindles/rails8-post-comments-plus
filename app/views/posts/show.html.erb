@@ -1,5 +1,6 @@
 <%= turbo_stream_from :posts_list %>
 <p style="color: green"><%= notice %></p>
+<%= turbo_frame_tag :index_new_post_modal do %>
 
 <%= render @post %>
 
@@ -11,3 +12,5 @@
 </div>
 
 <%= render 'comments/comments', post: @post %>
+
+<% end %>

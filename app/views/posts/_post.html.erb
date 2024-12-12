@@ -10,6 +10,7 @@
     <strong>Body:</strong>
     <%= post.body %>
   <p>
+<%= button_tag "Show in Modal", class: "btn btn-secondary show-post-modal", data: { post_id: post.id} %>    
     <%= link_to "Show this post", post %>
     <%= render 'comments/comments', post: post %>
   </p>
