@@ -3,7 +3,7 @@ class Post < ApplicationRecord
 
   after_create_commit do
     update_posts_count
-    broadcast_append_to :posts_list, target: "all-posts", partial: "posts/post", locals: { post: self }
+    broadcast_append_to :posts_list, target: "posts", partial: "posts/post", locals: { post: self }
   end
   after_update_commit do
     broadcast_replace_to :posts_list, target: self, partial: "posts/post", locals: { post: self }

@@ -9,10 +9,64 @@
     <%= render post %>
     <p>
       <%= link_to "Show this post", post %>
-      
-
-        <%#= render 'comments/comments', post: post %>
-
     </p>
   <% end %>
 </div>
+
+<%# Button to Open Modal %>
+<button type="button" class="btn btn-primary" id="newPostButton">
+  New Post
+</button>
+
+<%# Modal Frame %>
+<%= turbo_frame_tag :index_new_post_modal do %>
+  <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newPostModalLabel">New Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Content will be loaded here dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('newPostModal');
+  const modalBody = document.getElementById('modalBody');
+  const newPostButton = document.getElementById('newPostButton');
+
+  // Initialize the modal using Bootstrap's modal API
+  const bootstrapModal = new bootstrap.Modal(modal);
+
+  // Open modal and load the form
+  newPostButton.addEventListener('click', function() {
+    // Fetch the form content and load it into the modal body
+    fetch('/posts/new')
+      .then(response => response.text())
+      .then(html => {
+        modalBody.innerHTML = html; // Insert the form HTML into the modal body
+        bootstrapModal.show(); // Show the modal
+      })
+      .catch(error => console.error('Error loading the form:', error));
+  });
+
+  // Close modal when clicking the backdrop or pressing escape
+  modal.addEventListener('hidden.bs.modal', function () {
+    modalBody.innerHTML = ''; // Clear modal content after it's closed
+  });
+
+  // Listen for form submission completion and close modal
+  document.addEventListener('turbo:submit-end', function(event) {
+    // Check if the submission was successful and close the modal
+    if (event.detail.success) {
+      bootstrapModal.hide(); // Hide the modal after success
+    }
+  });
+});
+</script>
