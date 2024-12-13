@@ -1,3 +1,5 @@
+<%# app/views/posts/index.html.erb %>
+
 <%= turbo_stream_from :posts_list %>
 <span id="posts_count">
   <%= Post.count %>
@@ -17,9 +19,10 @@
 </button>
 
 <%#test post button%>
-<%= button_tag "Show in Modal", class: "btn btn-secondary show-post-modal", data: { post_id: Post.last.id} %>
+<%= button_tag "Show in Modal", class: "btn btn-secondary show-post-modal", data: { post_id: 122} %>
 
 <%# Modal Frame %>
+<%# New Post Modal %>
 <%= turbo_frame_tag :index_new_post_modal do %>
   <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -36,51 +39,83 @@
   </div>
 <% end %>
 
+<%# Show Post Modal %>
+<%= turbo_frame_tag :show_post_modal do %>
+  <div class="modal fade" id="showPostModal" tabindex="-1" aria-labelledby="showPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <%# Wider Modal %>
+      <div class="modal-content" style="height: 500px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: black blue;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="showPostModalLabel">Show Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="showPostBody">
+          <!-- Content will be loaded here dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const modal = document.getElementById('newPostModal');
-  const modalBody = document.getElementById('modalBody');
+  const newPostModal = document.getElementById('newPostModal');
+  const showPostModal = document.getElementById('showPostModal');
+  const newPostBody = document.getElementById('modalBody');
+  const showPostBody = document.getElementById('showPostBody');
   const newPostButton = document.getElementById('newPostButton');
-  const bootstrapModal = new bootstrap.Modal(modal);
+  const bootstrapNewPostModal = new bootstrap.Modal(newPostModal);
+  const bootstrapShowPostModal = new bootstrap.Modal(showPostModal);
 
-  // Open modal and load the "New Post" form
+  // Open modal and load "New Post" form
   newPostButton.addEventListener('click', function () {
     fetch('/posts/new')
       .then(response => response.text())
       .then(html => {
-        modalBody.innerHTML = html; // Insert the form HTML into the modal body
-        bootstrapModal.show(); // Show the modal
+        newPostBody.innerHTML = html;
+        bootstrapNewPostModal.show();
       })
       .catch(error => console.error('Error loading the form:', error));
   });
 
-  // Event delegation for the "Show in Modal" button
+  // Event delegation for "Show Post" button
   document.body.addEventListener('click', function (event) {
     if (event.target.matches('.show-post-modal')) {
       const postId = event.target.dataset.postId;
 
-      // Fetch the post content and load it into the modal body
       fetch(`/posts/${postId}`)
         .then(response => response.text())
         .then(html => {
-          modalBody.innerHTML = html; // Insert the post HTML into the modal body
-          bootstrapModal.show(); // Show the modal
+          showPostBody.innerHTML = html;
+          bootstrapShowPostModal.show();
         })
         .catch(error => console.error('Error loading the post:', error));
     }
   });
 
   // Clear modal content when closed
-  modal.addEventListener('hidden.bs.modal', function () {
-    modalBody.innerHTML = ''; // Clear modal content after it's closed
+  newPostModal.addEventListener('hidden.bs.modal', function () {
+    newPostBody.innerHTML = '';
+  });
+
+  showPostModal.addEventListener('hidden.bs.modal', function () {
+    showPostBody.innerHTML = '';
   });
 
   // Close modal on successful form submission
   document.addEventListener('turbo:submit-end', function (event) {
     if (event.detail.success) {
-      bootstrapModal.hide(); // Hide the modal after success
+      bootstrapNewPostModal.hide();
+      bootstrapShowPostModal.hide();
     }
   });
 });
 
+
 </script>
+
+
+
+
+
+

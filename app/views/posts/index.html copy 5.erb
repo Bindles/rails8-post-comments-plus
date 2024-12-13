@@ -1,5 +1,82 @@
 <%# app/views/posts/index.html.erb %>
 LAST WROKIGN SETUP BEFORE MAKING SHOW MODAL SEPEREATE
+NOT SURE WHICH INDEX
+INDEX1:
+<%# app/views/posts/index.html.erb %>
+
+<%= turbo_stream_from :posts_list %>
+<span id="posts_count">
+  <%= Post.count %>
+</span>
+<div id="posts">
+  <% @posts.each do |post| %>
+    <%= render post %>
+    <p>
+      <%= link_to "Show this post", post %>
+    </p>
+  <% end %>
+</div>
+
+<%# Button to Open Modal %>
+<button type="button" class="btn btn-primary" id="newPostButton">
+  New Post
+</button>
+
+<%# Modal Frame %>
+<%= turbo_frame_tag :index_new_post_modal do %>
+  <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newPostModalLabel">New Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Content will be loaded here dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('newPostModal');
+  const modalBody = document.getElementById('modalBody');
+  const newPostButton = document.getElementById('newPostButton');
+
+  // Initialize the modal using Bootstrap's modal API
+  const bootstrapModal = new bootstrap.Modal(modal);
+
+  // Open modal and load the form
+  newPostButton.addEventListener('click', function() {
+    // Fetch the form content and load it into the modal body
+    fetch('/posts/115')
+      .then(response => response.text())
+      .then(html => {
+        modalBody.innerHTML = html; // Insert the form HTML into the modal body
+        bootstrapModal.show(); // Show the modal
+      })
+      .catch(error => console.error('Error loading the form:', error));
+  });
+
+  // Close modal when clicking the backdrop or pressing escape
+  modal.addEventListener('hidden.bs.modal', function () {
+    modalBody.innerHTML = ''; // Clear modal content after it's closed
+  });
+
+  // Listen for form submission completion and close modal
+  document.addEventListener('turbo:submit-end', function(event) {
+    // Check if the submission was successful and close the modal
+    if (event.detail.success) {
+      bootstrapModal.hide(); // Hide the modal after success
+    }
+  });
+});
+</script>
+
+
+INDEX2 :
 <%= turbo_stream_from :posts_list %>
 <span id="posts_count">
   <%= Post.count %>
@@ -87,8 +164,178 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </script>
 
+NEW:
+<% content_for :title, "New post" %>
+<%= turbo_frame_tag :index_new_post_modal do %>
+  <h1>New post</h1>
+
+  <%= render "form", post: @post %>
+
+  <br>
+
+  <div>
+    <%= link_to "Back to posts", posts_path %>
+  </div>
+  <% end %>
 
 
 
+
+
+
+
+
+SEPERATE:
+<%# app/views/posts/index.html.erb %>
+
+<%= turbo_stream_from :posts_list %>
+<span id="posts_count">
+  <%= Post.count %>
+</span>
+<div id="posts">
+  <% @posts.each do |post| %>
+    <%= render post %>
+    <p>
+      <%= link_to "Show this post", post %>
+    </p>
+  <% end %>
+</div>
+
+<%# Button to Open Modal %>
+<button type="button" class="btn btn-primary" id="newPostButton">
+  New Post
+</button>
+
+<%#test post button%>
+<%= button_tag "Show in Modal", class: "btn btn-secondary show-post-modal", data: { post_id: 122} %>
+
+<%# Modal Frame %>
+<%# New Post Modal %>
+<%= turbo_frame_tag :index_new_post_modal do %>
+  <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newPostModalLabel">New Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Content will be loaded here dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%# Show Post Modal %>
+<%= turbo_frame_tag :show_post_modal do %>
+  <div class="modal fade" id="showPostModal" tabindex="-1" aria-labelledby="showPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <%# Wider Modal %>
+      <div class="modal-content" style="height: 500px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: black blue;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="showPostModalLabel">Show Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="showPostBody">
+          <!-- Content will be loaded here dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const newPostModal = document.getElementById('newPostModal');
+  const showPostModal = document.getElementById('showPostModal');
+  const newPostBody = document.getElementById('modalBody');
+  const showPostBody = document.getElementById('showPostBody');
+  const newPostButton = document.getElementById('newPostButton');
+  const bootstrapNewPostModal = new bootstrap.Modal(newPostModal);
+  const bootstrapShowPostModal = new bootstrap.Modal(showPostModal);
+
+  // Open modal and load "New Post" form
+  newPostButton.addEventListener('click', function () {
+    fetch('/posts/new')
+      .then(response => response.text())
+      .then(html => {
+        newPostBody.innerHTML = html;
+        bootstrapNewPostModal.show();
+      })
+      .catch(error => console.error('Error loading the form:', error));
+  });
+
+  // Event delegation for "Show Post" button
+  document.body.addEventListener('click', function (event) {
+    if (event.target.matches('.show-post-modal')) {
+      const postId = event.target.dataset.postId;
+
+      fetch(`/posts/${postId}`)
+        .then(response => response.text())
+        .then(html => {
+          showPostBody.innerHTML = html;
+          bootstrapShowPostModal.show();
+        })
+        .catch(error => console.error('Error loading the post:', error));
+    }
+  });
+
+  // Clear modal content when closed
+  newPostModal.addEventListener('hidden.bs.modal', function () {
+    newPostBody.innerHTML = '';
+  });
+
+  showPostModal.addEventListener('hidden.bs.modal', function () {
+    showPostBody.innerHTML = '';
+  });
+
+  // Close modal on successful form submission
+  document.addEventListener('turbo:submit-end', function (event) {
+    if (event.detail.success) {
+      bootstrapNewPostModal.hide();
+      bootstrapShowPostModal.hide();
+    }
+  });
+});
+
+
+</script>
+
+
+
+NEW:
+<% content_for :title, "New post" %>
+<%= turbo_frame_tag :index_new_post_modal do %>
+  <h1>New post</h1>
+
+  <%= render "form", post: @post %>
+
+  <br>
+
+  <div>
+    <%= link_to "Back to posts", posts_path %>
+  </div>
+  <% end %>
+
+  SHOW:
+
+
+<%= turbo_stream_from :posts_list %>
+<p style="color: green"><%= notice %></p>
+<%= turbo_frame_tag :index_new_post_modal do %>
+
+<%= render @post %>
+
+<div>
+  <%= link_to "Edit this post", edit_post_path(@post) %> |
+  <%= link_to "Back to posts", posts_path %>
+
+  <%= button_to "Destroy this post", @post, method: :delete %>
+</div>
+
+<%#= render 'comments/comments', post: @post %>
+
+<% end %>
 
 

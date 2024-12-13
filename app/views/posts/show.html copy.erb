@@ -1,7 +1,7 @@
 <%= turbo_stream_from :posts_list %>
 <p style="color: green"><%= notice %></p>
 <%= turbo_frame_tag :show_post_inside_index do %>
-SHOW <%= @post.inspect %>
+SHOW
 <%= render @post %>
 
 <div>

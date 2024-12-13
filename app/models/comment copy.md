@@ -7,7 +7,6 @@ class Comment < ApplicationRecord
   # Broadcast changes to the global :posts_list stream
   after_create_commit do
     broadcast_prepend_to(:posts_list, target: dom_id(post, :comments), partial: "comments/comment", locals: { comment: self })
-    broadcast_prepend_to(:posts_list, target: dom_id(post, :commentsx), partial: "comments/comment", locals: { comment: self })
   end
 
   after_update_commit do

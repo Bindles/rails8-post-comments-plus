@@ -1,0 +1,54 @@
+<%# app/views/posts/index.html.erb %>
+
+<%= turbo_stream_from :posts_list %>
+<span id="posts_count">
+  <%= Post.count %>
+</span>
+<div id="posts">
+  <% @posts.each do |post| %>
+    <%= render post %>
+    <p>
+      <%= link_to "Show this post", post_path(post), data: { turbo_frame: :show_post_inside_index, bs_toggle: "modal", bs_target: "#showPostModal" }, class: "btn btn-primary" %>
+    </p>
+  <% end %>
+</div>
+
+<%# Modal Turbo Frame Placeholder %>
+<%= turbo_frame_tag :show_post_inside_index do %>
+  <div class="modal fade" id="showPostModal" tabindex="-1" aria-labelledby="showPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="showPostModalLabel">Post Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Content will load dynamically here -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener('turbo:load', () => {
+  const modal = document.getElementById('showPostModal');
+  const modalInstance = new bootstrap.Modal(modal);
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+
+    // Check if the clicked element is the "Show" button
+    if (target.matches('[data-bs-toggle="modal"]') && target.dataset.turboFrame === "show_post_inside_index") {
+      modalInstance.show();
+    }
+  });
+
+  // Clear Turbo Frame content when the modal is closed
+  modal.addEventListener('hidden.bs.modal', () => {
+    const turboFrame = document.querySelector('turbo-frame#show_post_inside_index');
+    if (turboFrame) turboFrame.innerHTML = '';
+  });
+});
+
+</script>
