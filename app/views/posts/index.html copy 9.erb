@@ -46,19 +46,51 @@
 <%# Show Post Modal %>
 <%= turbo_frame_tag :show_post_modal do %>
   <div class="modal fade" id="showPostModal" tabindex="-1" aria-labelledby="showPostModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <%# Wider Modal %>
-      <div class="modal-content" style="height: 500px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: black blue;">
-        <div class="modal-header">
-          <h5 class="modal-title" id="showPostModalLabel">Show Post</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog" style="max-width: 700px;">
+      <div class="modal-content" style="background-color: #3a3a3a; color: white; border-radius: 10px; height: 580px; display: flex; flex-direction: column;">
+        <!-- Modal Header -->
+        <div class="modal-header" style="border-bottom: none;">
+          <h5 class="modal-title" id="showPostModalLabel" style="color: white;">Post Details</h5>
+          <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close" style="background-color: #b0b0b0; border-radius: 50%; padding: 0.5rem; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 1.5rem; color: white;">&times;</span>
+          </button>
         </div>
-        <div class="modal-body" id="showPostBody">
+
+        <!-- Modal Body -->
+        <div class="modal-body" id="showPostBody" style="overflow-y: auto; flex: 1; padding: 0;">
           <!-- Content will be loaded here dynamically -->
+        </div>
+
+        <!-- Comment Section -->
+        <div class="modal-footer" style="border-top: 1px solid #fff; background-color: #2e2e2e; padding: 10px; flex-direction: column; align-items: stretch;">
+          <!-- Comments Section -->
+          <div id="comments_section" style="flex: 1; overflow-y: auto; max-height: 400px;">
+          zz <%= params[:id].inspect %> <%= params.inspect %> 
+          <% if params[:action] == 'show '%>
+          <%= post_id.inspect %>
+          <% end %>
+            <% if params[:id] %>
+            x
+            <%= render 'comments/commentsx', post: @post %>
+            <% end %>
+          </div>
+
+          <!-- New Comment Form -->
+          <div id="new_comment_form" style="margin-top: 10px; background-color: #444; padding: 10px; border-radius: 8px;">
+          zz
+          <% if defined?(@post) && @post.present? %>
+          x
+            <%= render 'comments/new', post: @post %>
+          <% end %>
+          </div>
         </div>
       </div>
     </div>
   </div>
 <% end %>
+
+
+
 
 
 <script>

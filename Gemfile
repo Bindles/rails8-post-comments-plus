@@ -63,3 +63,5 @@ group :test do
 end
 
 gem "rack-cors", "~> 2.0"
+
+gem "httparty", "~> 0.22.0"
