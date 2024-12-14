@@ -8,6 +8,10 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
+    # render turbo_stream: turbo_stream.append("xxx", html: "aaa")
+    # format.turbo_stream { render turbo_stream: turbo_stream.append(:messages, partial: "message", locals: { message: @message }) }
+    # render turbo_stream: turbo_stream.append("xxx", "<div>aaa</div>".html_safe)
+    #
   end
 
   # GET /posts/new

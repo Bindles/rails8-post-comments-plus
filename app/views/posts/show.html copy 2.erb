@@ -1,10 +1,8 @@
-<%#= turbo_stream.append("xxxx", html: "aaaassasassasas")%>
-<%= turbo_stream.append("xxxx", partial: "comments/newx", locals: { post: @post }) %>
+<%= turbo_stream_from :posts_list %>
 <p style="color: green"><%= notice %></p>
 <%= turbo_frame_tag :show_post_inside_index do %>
-<%= turbo_stream_from :posts_list %>
 SHOW <%= @post.inspect %>
-<%= render 'posts/postxshow', post: @post %>
+<%= render @post %>
 
 <div>
   <%= link_to "Edit this post", edit_post_path(@post) %> |

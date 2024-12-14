@@ -1,3 +1,4 @@
+<div class="xxx" id="xxx">Z:</div>
 <%= turbo_stream_from :posts_list %>
 
 <img src='<%= GlobalImages.relevant_images.sample %>'>
@@ -44,21 +45,40 @@
 <% end %>
 
 <%# Show Post Modal %>
+<%# Show Post Modal %>
 <%= turbo_frame_tag :show_post_modal do %>
   <div class="modal fade" id="showPostModal" tabindex="-1" aria-labelledby="showPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg"> <%# Wider Modal %>
-      <div class="modal-content" style="height: 500px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: black blue;">
-        <div class="modal-header">
-          <h5 class="modal-title" id="showPostModalLabel">Show Post</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-content" style="background-color: #333; color: #fff; border-radius: 10px; width: 700px; height: 580px;">
+
+        <!-- Modal Header -->
+        <div class="modal-header" style="border-bottom: 1px solid #fff;">
+          <h5 class="modal-title" id="showPostModalLabel" style="color: #fff;">Post Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: #666; color: #fff; border-radius: 50%;"></button>
         </div>
-        <div class="modal-body" id="showPostBody">
-          <!-- Content will be loaded here dynamically -->
+
+        <!-- Modal Body (Scrollable) -->
+        <div class="modal-body" id="showPostBody" style="overflow-y: auto; max-height: 400px;">
+          <%# Content dynamically loaded from show.html.erb %>
         </div>
+
+        <!-- Modal Footer (Fixed Comments Form) -->
+        <div class="modal-footer" style="background-color: #2e2e2e; padding: 10px;">
+          <div id="xxxx" style="background-color: #444; padding: 10px; border-radius: 8px; width: 100%;">
+            <!-- Turbo Frame for New Comment Form -->
+            <%#= turbo_frame_tag :new_comment_form do %>
+              <%# Content dynamically loaded here %>
+            <%# end %>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 <% end %>
+
+
+
 
 
 <script>
